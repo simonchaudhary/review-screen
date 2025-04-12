@@ -1,15 +1,15 @@
-import { useState } from "react";
-import Preview from "./components/DocumentPreview";
-import ReviewSidebar from "./components/ReviewSidebar";
 import sectionsData from "@/data/sections.json";
 import { Section } from "@/type/section";
+import { useState } from "react";
+import DocumentPreview from "./components/DocumentPreview";
+import ReviewSidebar from "./components/ReviewSidebar";
 
 function Review() {
   const [sections, setSections] = useState<Section[]>(() => {
     return sectionsData.data.sections[0].children as Section[];
   });
-
   const [selectedSections, setSelectedSections] = useState<number[]>([]);
+  const [hoveredSection, setHoveredSection] = useState<number | null>(null);
 
   const onSectionRemove = (id: number) => {
     const newSection = sections.filter((item) => item.id !== id);
@@ -36,7 +36,12 @@ function Review() {
 
   return (
     <div className="flex h-full">
-      <Preview />
+      <DocumentPreview
+        sections={sections}
+        selectedSections={selectedSections}
+        onSectionHover={setHoveredSection}
+        hoveredSection={hoveredSection}
+      />
 
       <ReviewSidebar
         onSectionRemove={onSectionRemove}
@@ -44,6 +49,8 @@ function Review() {
         onSectionSelectAllToggle={onSectionSelectAllToggle}
         sections={sections}
         selectedSections={selectedSections}
+        hoveredSection={hoveredSection}
+        onSectionHover={setHoveredSection}
       />
     </div>
   );

@@ -19,6 +19,8 @@ import { getElementId } from "@/utils/dom";
 import { getAcronym } from "@/utils/string";
 
 import ConfirmDialog from "@/components/ConfirmDialog";
+import { cn } from "@/lib/utils";
+import { generateColorMap } from "@/utils/colors";
 import { toast } from "sonner";
 
 type ReviewSidebarProps = {
@@ -27,6 +29,8 @@ type ReviewSidebarProps = {
   onSectionRemove: (id: number) => void;
   onSectionToggle: (id: number) => void;
   onSectionSelectAllToggle: () => void;
+  hoveredSection: number | null;
+  onSectionHover: (id: number | null) => void;
 };
 
 function ReviewSidebar(props: ReviewSidebarProps) {
@@ -36,6 +40,8 @@ function ReviewSidebar(props: ReviewSidebarProps) {
     onSectionRemove,
     onSectionToggle,
     onSectionSelectAllToggle,
+    hoveredSection,
+    onSectionHover,
   } = props;
 
   const onConfirm = () => {
@@ -45,65 +51,97 @@ function ReviewSidebar(props: ReviewSidebarProps) {
   return (
     <div className="w-96 flex flex-col h-full border-l bg-primary-foreground">
       <section className="flex-1 overflow-y-auto flex flex-col gap-y-4 py-4 scrollbar-stable-both-edge pr-4">
-        {sections.map((item) => (
-          <Card key={item.id}>
-            <CardContent className="flex items-center justify-between">
-              <section className="flex items-start gap-x-3">
-                <section className="w-10 min-w-10  h-10 rounded-md bg-amber-200 flex items-center overflow-hidden">
-                  <section className="w-[6px] h-full bg-amber-400" />
+        {sections.map((section, index) => {
+          const boxColor = generateColorMap(sections.length, {
+            lightness: 60,
+          })[index + 1];
 
-                  <section className="flex items-center justify-center text-sm font-bold flex-1 text-white">
-                    {getAcronym(item.label)}
+          const barColor = generateColorMap(sections.length)[index + 1];
+
+          const cardColor = generateColorMap(sections.length, { opacity: 0.1 })[
+            index + 1
+          ];
+
+          return (
+            <Card
+              className="cursor-pointer"
+              key={section.id}
+              style={{
+                backgroundColor: hoveredSection === section.id ? cardColor : "",
+              }}
+              onMouseEnter={() => onSectionHover(section.id)}
+              onMouseLeave={() => onSectionHover(null)}
+            >
+              <CardContent className="flex items-center justify-between">
+                <section className="flex items-start gap-x-3">
+                  <section
+                    style={{
+                      backgroundColor: boxColor,
+                    }}
+                    className={cn(
+                      "w-10 min-w-10 h-10 rounded-md flex items-center overflow-hidden"
+                    )}
+                  >
+                    <section
+                      className="w-[6px] h-full"
+                      style={{
+                        backgroundColor: barColor,
+                      }}
+                    />
+
+                    <section className="flex items-center justify-center text-sm font-bold flex-1 text-white">
+                      {getAcronym(section.label)}
+                    </section>
+                  </section>
+
+                  <section className="">
+                    <CardTitle>{section.label}</CardTitle>
+
+                    <CardDescription>
+                      {section.content?.value || "No value"}
+                    </CardDescription>
                   </section>
                 </section>
 
-                <section className="">
-                  <CardTitle>{item.label}</CardTitle>
+                <section className="flex items-center gap-x-3">
+                  <Checkbox
+                    id={getElementId("section", section.id)}
+                    checked={selectedSections.includes(section.id)}
+                    onCheckedChange={() => onSectionToggle(section.id)}
+                  />
 
-                  <CardDescription>
-                    {item.content?.value || "No value"}
-                  </CardDescription>
-                </section>
-              </section>
-
-              <section className="flex items-center gap-x-3">
-                <Checkbox
-                  id={getElementId("section", item.id)}
-                  checked={selectedSections.includes(item.id)}
-                  onCheckedChange={() => onSectionToggle(item.id)}
-                />
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="!px-0">
-                      <Icons.moreVertical />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    className="w-32"
-                    side="left"
-                    align="center"
-                  >
-                    <DropdownMenuLabel>
-                      <Button
-                        variant="ghost"
-                        onClick={() => onSectionRemove(item.id)}
-                      >
-                        <Icons.remove
-                          className="opacity-60 text-destructive"
-                          size={16}
-                          strokeWidth={2}
-                          aria-hidden="true"
-                        />
-                        {en.buttons.remove}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="!px-0">
+                        <Icons.moreVertical />
                       </Button>
-                    </DropdownMenuLabel>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </section>
-            </CardContent>
-          </Card>
-        ))}
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      className="w-32"
+                      side="left"
+                      align="center"
+                    >
+                      <DropdownMenuLabel>
+                        <Button
+                          variant="ghost"
+                          onClick={() => onSectionRemove(section.id)}
+                        >
+                          <Icons.remove
+                            className="opacity-60 text-destructive"
+                            size={16}
+                            strokeWidth={2}
+                            aria-hidden="true"
+                          />
+                          {en.buttons.remove}
+                        </Button>
+                      </DropdownMenuLabel>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </section>
+              </CardContent>
+            </Card>
+          );
+        })}
       </section>
 
       <section className="bg-background border-t flex gap-2 items-center justify-between p-4">
@@ -112,12 +150,18 @@ function ReviewSidebar(props: ReviewSidebarProps) {
           className="w-fit"
           onClick={onSectionSelectAllToggle}
         >
-          {en.buttons.selectAll}
+          {selectedSections.length === sections.length
+            ? en.buttons.deselectAll
+            : en.buttons.selectAll}
         </Button>
 
         <ConfirmDialog
           trigger={
-            <Button variant="default" className="w-fit">
+            <Button
+              variant="default"
+              className="w-fit"
+              disabled={selectedSections.length === 0}
+            >
               {en.buttons.confirm}
             </Button>
           }

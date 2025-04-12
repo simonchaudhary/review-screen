@@ -1,6 +1,7 @@
 export const en = {
   buttons: {
     selectAll: "Select All",
+    deselectAll: "Deselect All",
     confirm: "Confirm",
     remove: "Remove",
     cancel: "Cancel",
@@ -8,10 +9,11 @@ export const en = {
 
   modal: {
     confirmSelectedField:
-      "Are you sure you want to confirm the selected fields",
+      "Are you sure you want to confirm the selected fields?",
   },
 
   toast: {
-    fieldConfirmedSuccessfully: "Fields confirmed and processed successfully!",
+    fieldConfirmedSuccessfully:
+      "All fields were confirmed and processed successfully.",
   },
 };
