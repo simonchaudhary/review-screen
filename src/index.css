@@ -116,6 +116,10 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-hidden;
   }
+}
+
+.scrollbar-stable-both-edge {
+  scrollbar-gutter: stable both-edges;
 }
