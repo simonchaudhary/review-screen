@@ -6,12 +6,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/Icons";
 
-interface DocumentPreviewProps {
+type DocumentPreviewProps = {
   selectedSections: number[];
   sections: Section[];
   onSectionHover: (id: number | null) => void;
   hoveredSection: number | null;
-}
+};
 
 function DocumentPreview({
   selectedSections = [],

@@ -1,10 +1,10 @@
 type ColorMap = Record<number, string>;
 
-interface ColorParams {
+type ColorParams = {
   lightness?: number;
   opacity?: number;
   saturation?: number;
-}
+};
 
 /**
  * Generates a color map with n colors using the golden ratio.

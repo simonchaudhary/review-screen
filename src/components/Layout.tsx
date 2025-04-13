@@ -2,9 +2,9 @@ import React from "react";
 import { Header } from "./Header";
 import { Toaster } from "./ui/sonner";
 
-interface LayoutProps {
+type LayoutProps = {
   children: React.ReactNode;
-}
+};
 
 function Layout(props: LayoutProps) {
   const { children } = props;

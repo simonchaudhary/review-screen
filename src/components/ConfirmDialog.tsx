@@ -12,7 +12,7 @@ import {
 import { en } from "@/language/en";
 import { ReactNode } from "react";
 
-interface ConfirmDialogProps {
+type ConfirmDialogProps = {
   trigger: ReactNode;
   title: string;
   description?: string;
@@ -20,7 +20,7 @@ interface ConfirmDialogProps {
   confirmText?: string;
   onConfirm: () => void;
   onCancel?: () => void;
-}
+};
 
 function ConfirmDialog({
   trigger,
