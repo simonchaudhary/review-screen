@@ -31,6 +31,7 @@ type SectionCardProps = {
   onSectionToggle: (id: number) => void;
   isHovered: boolean;
   onSectionHover: (id: number | null) => void;
+  ref: React.Ref<HTMLDivElement>;
 };
 
 const SectionCard = memo(
@@ -44,6 +45,7 @@ const SectionCard = memo(
       onSectionToggle,
       isHovered,
       onSectionHover,
+      ref,
     } = props;
 
     const colors = useMemo(
@@ -57,6 +59,7 @@ const SectionCard = memo(
 
     return (
       <Card
+        ref={ref}
         className="cursor-pointer"
         key={section.id}
         style={{
