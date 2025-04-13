@@ -8,7 +8,7 @@ export function Header() {
 
   return (
     <header className="bg-background sticky inset-x-0 top-0 isolate z-10  border-b h-14">
-      <div className="container mx-auto px-4 flex shrink-0 items-center gap-2 justify-between py-2">
+      <div className="mx-auto px-4 flex shrink-0 items-center gap-2 justify-between py-2">
         <div className="flex items-center gap-2">
           <span className="text-lg font-bold">Review Screen App</span>
         </div>
