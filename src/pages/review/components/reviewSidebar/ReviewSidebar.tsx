@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button";
 import { en } from "@/language/en";
 import { Section } from "@/type/section";
 
-import ConfirmDialog from "@/components/ConfirmDialog";
+import ConfirmDialog from "@/components/common/ConfirmDialog";
 import { toast } from "sonner";
-import SectionList from "./SectionList";
 import SectionCard from "./SectionCard";
+import SectionList from "./SectionList";
 
 type ReviewSidebarProps = {
   sections: Section[];
@@ -37,6 +37,7 @@ function ReviewSidebar(props: ReviewSidebarProps) {
       <SectionList sections={sections}>
         {(section, index) => (
           <SectionCard
+            key={section.id}
             index={index}
             section={section}
             totalSections={sections.length}

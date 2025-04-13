@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { en } from "@/language/en";
 import { Section } from "@/type/section";
 
-import { Icons } from "@/components/Icons";
+import { Icons } from "@/components/common/Icons";
 import {
   Card,
   CardContent,
